@@ -1,0 +1,5 @@
+		
+			<input type="hidden" name="_$status.expression" />
+			<label for="$status.expression"><input type="checkbox" id="$status.expression" name="$status.expression" value="true"#if ($status.value && $status.value == "true") checked="checked"#end /> 
+			$fieldControl.fieldControlOptions.value.fieldControlOptions.get(0).text.value</label>
+		

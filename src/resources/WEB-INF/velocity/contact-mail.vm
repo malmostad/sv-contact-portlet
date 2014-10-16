@@ -1,0 +1,27 @@
+#if ($contactObject.mail)
+#if (!$useInContent)
+<div class="write-to-us"><a href="$writetousURL&amp;contactId=$contact.id">Skriv till oss</a></div>
+  #if($contactid==$contact.id)
+	<script type="text/javascript">
+		//<![CDATA[
+			$("#activeform").show();
+			window.location.hash="activeform"
+			var el = $("#activeform");
+            while(el.next().length === 1){
+               el = el.next();
+               if(el.hasClass('write-to-us')){
+                  el.hide();
+                  break;
+               }      
+            }
+		//]]>
+	</script>
+  #end
+#end
+	#if ($contactObject.mail.indexOf('@') > 22)
+		#set ($mail = $contactObject.mail.replaceFirst("@", "<br/>@"))
+	#else
+		#set ($mail = $contactObject.mail)
+	#end
+<div>E-post: <span class="email">$mail</span></div>
+#end

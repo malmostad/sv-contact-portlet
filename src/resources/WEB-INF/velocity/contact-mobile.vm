@@ -1,0 +1,3 @@
+#if ($contactObject.mobile)
+<div>Mobil: <span class="tel">$contactObject.mobile</span></div>
+#end

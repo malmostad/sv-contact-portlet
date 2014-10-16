@@ -1,0 +1,30 @@
+#if ($message.reply)Ärendenummer: 
+$message.reply.caseNumber
+
+#end
+Namn:
+$message.name
+
+E-post:
+$message.email
+
+Telefon:
+$message.telephone
+
+Meddelandet avser:
+$message.type
+
+Meddelande:
+$message.message
+
+Sida som meddelandet skickades ifrån:
+$message.sourceUrl
+
+Avsändarens IP-adress:
+$message.userIP
+
+Detta är ett kvittensmeddelande som skickas till den avsändande
+e-postadressen som angetts i konktaktformuläret på malmo.se. Är det inte du
+som skickat in ovanstående kan du bortse från detta meddelande och kasta
+det. Har du några ytterligare frågor eller synpunkter, kontakta
+malmostad@malmo.se.

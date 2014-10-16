@@ -1,0 +1,27 @@
+<div class="news-box">
+    <div class="news-box-header">
+
+        <h2>$utils.propertyUtil.getString($portlet, "displayName", "Stadsdelsinformation")</h2>
+        
+    </div><!-- / news-box-header -->
+    <div class="news-box-content-wrapper">
+    
+        <div class="news-box-content-container">
+        
+            <div class="news-box-content">
+            	#set($prefix = "news")
+            	#parse("district-selector.vm")
+				<div class="district-content">
+				#if ($content)
+					$content				
+				#else
+					<p>Det finns ingen specifik information för denna stadsdel.</p>				
+				#end
+				</div>
+            </div><!-- / news-box-holder -->
+            
+        </div><!-- / news-box-container -->
+        
+    </div><!-- / news-box-container-wrapper -->
+
+</div><!-- / news-box -->

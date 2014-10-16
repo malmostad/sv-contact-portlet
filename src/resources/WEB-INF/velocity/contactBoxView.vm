@@ -1,0 +1,27 @@
+<aside class="contact-us vcard basic">
+	#if (!$useInContent)   
+    <h1>Kontakta oss</h1>    
+    #end                            
+	#if ($contactBox.districtSelector)  
+		#set($prefix = "contact")
+		#parse("district-selector.vm")
+	#end
+	#if (($contactBox.text && $contactBox.text.length() > 0) && (($contactBox.districtSelector && $district) || !$contactBox.districtSelector))
+    <div>$contactBox.text</div>
+	#end
+    #foreach($contact in $currentContacts)
+    	#set ($contactObject = $contact.getContactObject($directoryUtil))    
+        #parse("contact-name.vm")
+		#parse("contact-writeToUsForm.vm")
+    	#foreach($attr in $contact.attributes)
+    		#set ($view = "contact-${attr}.vm")
+    		#parse($view)
+    	#end    
+    #end
+    #if ($contactBox.districtSelector && $district && !$contactObject && $districts.get($district))
+    <div>Du har valt $districts.get($district). Det finns ingen specifik kontaktinformation för #if(${areaTypeName}=="stadsdel") denna #else detta #end${areaTypeName}.</div>
+    #end                            
+</aside>
+#if(${areaTypeName}!="stadsdel")
+	#include("area_autocomplete_include.js")
+#end

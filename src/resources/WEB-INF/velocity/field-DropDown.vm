@@ -1,0 +1,11 @@
+
+		<label class="control-label" for="$status.expression">$fieldLabel</label>
+		
+			<select id="$status.expression" name="$status.expression">
+				<option/>
+		#foreach($option in $fieldControl.fieldControlOptions.value.fieldControlOptions)
+				<option#if ($status.value && $status.value == $option.text.value) selected="selected"#end>$option.text.value</option>
+		#end
+			</select>
+
+		

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN" "http://www.springframework.org/dtd/spring-beans-2.0.dtd">
+
+<beans>	
+	<bean id="config" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="location">
+			<value>/WEB-INF/kontaktruta.properties</value>
+		</property>
+	</bean>
+
+	<!-- Message source for this context, loaded from localized "messages_xx" files -->
+	<bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
+		<property name="basenames">
+			<list>
+				<value>messages</value>
+			</list>
+		</property>										
+	</bean>
+
+	<!-- VelocityConfig -->
+	<bean id="velocityEngine" class="org.springframework.ui.velocity.VelocityEngineFactoryBean">
+		<property name="resourceLoaderPath" value="/WEB-INF/velocity/"/>
+  		<property name="velocityProperties">
+			<props>
+				<prop key="input.encoding">UTF-8</prop>
+				<prop key="output.encoding">UTF-8</prop>
+			</props>
+		</property>
+	</bean>
+	<bean id="velocityConfig" class="org.springframework.web.servlet.view.velocity.VelocityConfigurer">
+		<property name="resourceLoaderPath" value="/WEB-INF/velocity/"/>
+  		<property name="velocityProperties">
+			<props>
+				<prop key="input.encoding">UTF-8</prop>
+				<prop key="output.encoding">UTF-8</prop>
+			</props>
+		</property>
+	</bean>
+
+	<!-- Default View Resolver -->
+	<bean id="viewResolver" class="org.springframework.web.servlet.view.velocity.VelocityViewResolver">
+  		<property name="cache" value="true"/>
+  		<property name="prefix" value=""/>
+  		<property name="suffix" value=".vm"/>
+
+  		<property name="numberToolAttribute" value="numbertool"/>
+		<property name="dateToolAttribute" value="datetool"/>
+		
+		<property name="contentType" value="text/html;charset=UTF-8"/>
+		
+  		<property name="toolboxConfigLocation" value="/WEB-INF/toolbox.xml"/>
+  		
+		<!-- if you want to use the Spring Velocity macros, set this property to true -->
+  		<property name="exposeSpringMacroHelpers" value="true"/>
+	</bean>
+
+	<!-- Default ExceptionHandler -->
+	<bean id="defaultExceptionHandler" class="org.springframework.web.portlet.handler.SimpleMappingExceptionResolver">
+    <property name="order" value="10"/>
+		<property name="defaultErrorView" value="error"/>
+		<property name="exceptionMappings">
+			<props>
+				<prop key="javax.portlet.PortletSecurityException">unauthorized</prop>
+				<prop key="javax.portlet.UnavailableException">unavailable</prop>
+			</props>
+		</property>  
+	</bean>
+	
+	<!-- Datasource for mappning streets to districts -->
+	<bean id="streetsDataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+        <property name="driverClassName" value="oracle.jdbc.driver.OracleDriver"/>
+        <property name="url" value="${streets.url}"/>
+        <property name="username" value="${streets.username}"/>
+        <property name="password" value="${streets.password}"/>
+    </bean>
+	
+</beans>

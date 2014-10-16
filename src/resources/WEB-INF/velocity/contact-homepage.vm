@@ -1,0 +1,6 @@
+#if ($contactObject.homepage)
+	$linkRenderer.setStringTarget($contactObject.homepage)
+	$linkRenderer.setTitle($contactObject.homepage)
+	$linkRenderer.setText("Webbsida")
+<div>$linkRenderer.render()</div>
+#end

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src/java/main"/>
+	<classpathentry kind="src" path="src/java/wsclient"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6">
+		<attributes>
+			<attribute name="owner.project.facets" value="java"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="src/lib/portlet-api.jar"/>
+	<classpathentry kind="lib" path="src/lib/servlet-api.jar"/>
+	<classpathentry kind="lib" path="src/lib/sitevision-public-api-3.1.3.jar"/>
+	<classpathentry kind="lib" path="src/lib/app/commons-dbutils-1.1.jar"/>
+	<classpathentry kind="lib" path="src/lib/app/commons-lang.jar"/>
+	<classpathentry kind="lib" path="src/lib/app/commons-logging-1.1.1.jar"/>
+	<classpathentry kind="lib" path="src/lib/app/gson-1.3.jar"/>
+	<classpathentry kind="lib" path="src/lib/app/mail.jar"/>
+	<classpathentry kind="lib" path="src/lib/app/spring-modules-validation.jar"/>
+	<classpathentry kind="lib" path="src/lib/app/spring-webmvc-portlet.jar"/>
+	<classpathentry kind="lib" path="src/lib/app/spring-webmvc.jar"/>
+	<classpathentry kind="lib" path="src/lib/app/spring.jar"/>
+	<classpathentry kind="lib" path="src/lib/app/velocity-1.5.jar"/>
+	<classpathentry kind="lib" path="src/lib/app/velocity-tools-view-1.4.jar"/>
+	<classpathentry kind="output" path="build/classes"/>
+</classpath>

@@ -1,0 +1,6 @@
+.config { background-color:#eeeeee; }
+.search { width:400px; }
+.novalue { font-style: italic; color:#555555; }
+.button { width:100px; }
+form { display:inline; }
+legend { padding-left: 5px; padding-right: 5px; }

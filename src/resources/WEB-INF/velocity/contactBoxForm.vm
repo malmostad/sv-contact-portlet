@@ -1,0 +1,106 @@
+#parse("head.vm")
+<form id="configForm" action="$renderResponse.createActionURL()" method="post">
+	<fieldset style="padding:5px">
+		<legend>Kontaktruta</legend>
+		#springBind( "contactBox.inheritance" )
+		<div>
+			<input type="hidden" name="_$status.expression" />
+			<input type="checkbox" id="$status.expression" name="$status.expression" value="true"#if ($status.value == "true") checked="checked"#end />
+			<label class="label" for="$status.expression">Ärv ovanifrån</label>
+		</div>	
+		#springBind( "contactBox.districtSelector" )		
+		<div>
+			<input type="hidden" name="_$status.expression" />
+			<input type="checkbox" id="$status.expression" name="$status.expression" value="true"#if ($status.value == "true") checked="checked"#end />
+			<label class="label" for="$status.expression">${areaTypeName}sväljare</label>
+		</div>	
+		#springBind( "contactBox.text" )		
+		<div style="padding-top:5px;">
+			<label class="label" for="text">Fritext</label>
+		</div>	
+		<div>
+			#springFormTextarea( "contactBox.text" 'cols="50" rows="4" style="width:415px;"' )
+		</div>
+		<div style="padding-top:5px;">
+			<label class="label" for="contact">Kontaktpersoner</label>
+		</div>	
+		<div>
+			<div style="float:left">
+				<select id="contact" name="contact" size="10" style="width:300px;">
+				#foreach($key in $contactList.keySet())					
+					<option value="$key">$contactList.get($key)</option>
+				#end
+				</select>
+			</div>
+			<div style="float:left; text-align:center; padding-left:20px;">
+					<div style="padding-top:10px;"><input id="addContact" name="_addContact" type="submit" value="Lägg till" class="button"/></div>
+					<div style="padding-top:10px;"><input id="modifyContact" name="_modifyContact" type="submit" value="Ändra" class="button"/></div>
+					<div style="padding-top:10px;"><input id="removeContact" name="_removeContact" type="submit" value="Ta bort" class="button"/></div>
+			</div>
+			<div style="clear:both"></div>
+		</div>
+	</fieldset>
+	<div style="float:right; text-align:center; padding-top:10px;">
+		<div style="display:inline; padding-left:10px;"><input type="submit" id="ok" name="_ok" value="OK" class="button"/></div>
+		<div style="display:inline; padding-left:10px;"><input type="submit" id="cancel" name="_cancel" value="Avbryt" class="button"/></div>
+	</div>
+	<div style="clear:both"></div>
+</form>
+<script type="text/javascript">
+//<![CDATA[
+	$(document).ready(function() {
+		$("body").addClass("config");
+
+		$("#text").inputlimiter({
+			limit: 100,
+			remText: 'Du har %n tecken kvar...',
+			limitText: 'Du får bara skriva in %n tecken i detta fält.'
+		});				
+		$("#inheritance").click(function(){
+			toggleContacts();
+		});
+
+		$("#districtSelector").click(function(){
+			$("#configForm").submit();
+		});
+		
+		$("#contact").change(function(){
+			if (!$("#inheritance").attr("checked")) {
+				$("#modifyContact").removeAttr("disabled");
+				$("#removeContact").removeAttr("disabled");
+			}			
+		});
+		
+		$("#contact").dblclick(function(){
+			$("#modifyContact").trigger("click");			
+		});
+		
+		$("#removeContact").click(function(event){
+			var dn = $("#contact").val();
+			if (!confirm("Är du säker på att du vill ta bort markerad kontaktperson?")) {
+				event.preventDefault();
+			}
+		});
+		
+		toggleContacts();
+		$("#modifyContact").attr("disabled", "disabled");
+		$("#removeContact").attr("disabled", "disabled");		
+ 	});
+ 	
+ 	function toggleContacts() {
+		if ($("#inheritance:checked").attr("checked")) {
+			$("#contact").attr("disabled", "disabled");
+			$("#addContact").attr("disabled", "disabled");
+			$("#modifyContact").attr("disabled", "disabled");
+			$("#removeContact").attr("disabled", "disabled");
+		}
+		else {
+			$("#contact").removeAttr("disabled");
+			$("#addContact").removeAttr("disabled");
+			$("#modifyContact").removeAttr("disabled");
+			$("#removeContact").removeAttr("disabled");
+		} 	
+ 	}
+//]]>
+</script>
+	

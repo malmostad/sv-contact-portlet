@@ -1,0 +1,3 @@
+
+		<label class="control-label" for="$status.expression">$fieldLabel</label>
+		#springFormTextarea( "$fieldName" 'rows="10" cols="50"' )

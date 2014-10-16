@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p" xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="
+    	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+    	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.5.xsd
+    	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd">
+
+	<context:property-placeholder location="/WEB-INF/kontaktruta.properties" />
+	
+	<bean name="handleCase" class="se.malmo.esb.primecase.HandleCase">
+		<constructor-arg value="${esb.handlecase.url}" />
+	</bean>	
+	
+	<bean name="formCache" class="se.malmo.www.primecase.util.PrimeCaseFormCache">
+		<constructor-arg ref="handleCase"/>
+		<constructor-arg value="60" />
+	</bean>
+	
+
+	<bean id="portletModeHandlerMapping"
+		class="org.springframework.web.portlet.handler.PortletModeHandlerMapping">
+		<property name="portletModeMap">
+			<map>
+				<entry key="view"><ref local="writeToUsFormController"/></entry>
+			</map>
+		</property>
+	</bean>
+
+ 		
+	<bean id="writeToUsFormController" class="se.malmo.www.skrivtilloss.portlet.WriteToUsFormController">
+		<property name="commandClass" value="se.malmo.www.skrivtilloss.model.Message"/>
+		<property name="commandName" value="message"/>
+		<property name="formView" value="writetousForm"/>
+		<property name="successView" value="writetousConfirm"/>
+		<property name="velocityEngine" ref="velocityEngine" />
+		<property name="formCache" ref="formCache" />
+		<property name="handleCase" ref="handleCase" />
+		<property name="smtpHost" value="${smtpHost}" />
+		<property name="fromAddress" value="noreply@malmo.se" />
+		<property name="onlyMail" value="${onlyMail}" />
+	</bean>
+			
+	<bean id="customExceptionHandler" class="org.springframework.web.portlet.handler.SimpleMappingExceptionResolver">
+		<property name="order" value="1"/>
+		<property name="exceptionMappings">
+			<props>
+				<prop key="se.malmo.www.skrivtilloss.exception.WriteToUsDeliveryException">writetousError</prop>
+			</props>
+		</property>  
+		
+	</bean>
+
+</beans>

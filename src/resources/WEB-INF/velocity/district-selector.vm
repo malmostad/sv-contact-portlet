@@ -1,0 +1,33 @@
+                <div class="district-selector">
+                    <form id="${prefix}-district-selector-form" method="post" action="/kontaktruta/select.do">
+                        <fieldset>
+                        
+                            <select id="${prefix}-district" name="district">
+                            #foreach($d in $districts.keySet())
+                            	<option value="$d"#if($district && $d == $district) selected="selected"#end>$districts.get($d)</option>
+							#end
+                            </select>
+                            
+                            <input type="submit" name="select" value="OK" class="input-button" />
+                            
+                        </fieldset>
+
+                        <fieldset class="only-js">
+							#if($areaTypeName)
+    							#if($areaTypeName=="stadsdel")
+    								#set( $fieldName = "district" )
+    							#else
+    								#set( $fieldName = "area" )
+    							#end							
+							#else
+								#set( $areaTypeName = "stadsdel" )
+								#set( $fieldName = "district" )
+							#end
+                            <label for="${prefix}-${fieldName}-search" class="district-search">Hitta ${areaTypeName} via gatuadress</label>
+                            <input type="text" id="${prefix}-${fieldName}-search" name="district-search" class="input-text" value="Skriv in en adress" onclick="if (this.value = 'Skriv in en adress') this.value='';" onkeypress="" />
+                        
+                        </fieldset>
+               
+                    </form>
+                </div>
+				

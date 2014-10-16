@@ -1,0 +1,4 @@
+#foreach($obj in $result)
+$obj.name|$obj.getProperty("dn").string|#if($type == 1)$directoryUtil.getAttributeAsProperty($obj,"fullname").string
+#else #end
+#end

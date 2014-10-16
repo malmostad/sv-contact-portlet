@@ -1,0 +1,66 @@
+#if ($form)
+#set($springXhtmlCompliant = true)
+<form class=""basic write-to-us-form" id="writetousForm" action="$renderResponse.createActionURL()" method="post">
+<h2 class="group-title">Skriv till oss</h2>
+#if ($result.hasErrors())
+	#if ($result.hasFieldErrors())
+<div class="alert">Vänligen korrigera uppgifter nedan. Klicka sedan på "Skicka" igen.</div>
+	#else
+<div class="error">Ett tillfälligt fel har inträffat. Försök att skicka igen.</div>
+	#end
+#end
+	<fieldset>
+    <input type="hidden" name="action" value="submit" />
+    <input type="hidden" name="contactId" value="0" />
+	#foreach($field in $form.fields.value.formField)
+		#if (!$field.isHidden())
+			#set ($fieldControl = $field.fieldControls.value.fieldControl.get(0))
+			#set ($fieldName = "message.field[${field.primeCaseId}]")
+			#if ($fieldControl.isRequired())
+				#set ($fieldLabel = "${field.label.value}:*")
+			#else
+				#set ($fieldLabel = "${field.label.value}:")
+			#end
+		
+			#springBind( $fieldName )
+			#if ($field.fieldType.value() == "CheckBox")
+			<div class="form-group">
+			#else
+			<div class="form-group">
+			#end
+			#if ($status.isError())
+			<div class="alert-field">
+				#foreach ($error in $status.errorMessages)
+				<p>$error</p>
+				#end
+			</div>
+			#end
+			#set ($view = "field-${field.fieldType.value()}.vm" )
+			#parse( $view )
+			</div>
+		#end
+	#end
+	<div>
+		#*
+		Tänk på att e-post som du skickar till en kommun i de flesta fall
+ 		betraktas som allmän handling. En allmän handling kan vara antingen
+ 		offentlig eller sekretessbelagd. Enligt offentlighetsprincipen har vem som
+	 	helst rätt att ta del av offentliga handlingar. 
+	 	*#
+	 	Tänk på att informationen du skickar i detta formulär inte skyddas på
+ 		något sätt och därför bör du inte uppge någon känslig information om dig
+ 		själv eller någon annan.
+	</div>
+	<div class="form-group"
+		<span class="control-label"></span>
+		<div class="controls">
+			<input type="submit" name="_ok" value="Skicka in ditt meddelande" class="input-button"/>
+		</div>
+		
+		<input type="submit" name="_cancel" value="Avbryt" class="input-button"/>
+	</div>
+	</fieldset>
+</form>
+#else
+	<h2 class="group-title">No form!</h2>
+#end

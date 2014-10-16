@@ -1,0 +1,12 @@
+<h1>Skriv till oss</h1>
+<div class="response">
+#if ($message.reply)
+	<div>Ärendenummer: $message.reply.caseNumber</div>
+	<div>Skriv gärna upp ärendenumret och uppge det i eventuella kontakter i ärendet framöver.</div>
+#else
+	<div>Ditt meddelande har skickats till <a href="$contactObject.mail">$contactObject.mail</a>.</div>
+#end
+#if ($isContactByEmail)
+	<div>En kopia har även skickats till den e-postadress du angivit.</div>
+#end
+</div>

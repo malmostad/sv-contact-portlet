@@ -1,0 +1,12 @@
+streets.url=jdbc:oracle:thin:@XXX.XX.XX.XXX:XXXX:dbname
+streets.username=XXX
+streets.password=XXX
+
+esb.handlecase.url=http://XXX?wsdl
+
+smtpHost=XXXX.XXX.XXX
+
+onlyMail=false
+
+searchBasePerson=ou=personal,o=malmo
+searchBaseFunction=ou=SiteVision,o=malmo

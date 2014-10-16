@@ -1,0 +1,69 @@
+#set ($isChosenContact = $chosenContactId==$contact.id)
+<form class="basic write-to-us-form" #if($isChosenContact)style="display:block;" id="activeform" #end method="post" action="$renderResponse.createActionURL()">
+	<input type="hidden" name="contactid" value="$contact.id">
+    <h2 class="group-title">Skriv till oss</h2>
+			
+	#if($sendconfirm&&$isChosenContact)
+		<div class="success">$sendconfirm</div>
+	#end	
+    <fieldset>
+		#if($hasErrors&&$isChosenContact)
+	   <div class="warning">Ditt meddelande har inte skickats</div>
+		#end
+		#if($senderror&&$isChosenContact==$contact.id)
+		<div class="error">$senderror</div>
+		#end							
+      <div class="form-group #if($validationErrors.get("name")&&$isChosenContact)warning#end">		
+        <label class="control-label" for="name">Namn:*</label>
+		<div class="controls">
+            <input type="text" placeholder="Ditt för och efternamn" name="name" id="name" class="form-control" #if($isChosenContact)value="$name"#end>
+    	    #if($validationErrors.get("name")&&$isChosenContact)<div class="help-block">$validationErrors.get("name")</div>#end
+		</div>
+      </div>
+
+      <div class="form-group #if($validationErrors.get("email")&&$isChosenContact)warning#end">
+        <label class="control-label" for="email">E-post:</label>
+		<div class="controls">
+            <input type="email" placeholder="Din e-postadress" name="email" id="email" class="form-control" #if($contactid==$contact.id)value="$email"#end>
+    		#if($validationErrors.get("email")&&$isChosenContact)<div class="help-block">$validationErrors.get("email")</div>#end
+		</div>
+      </div>
+
+      <div class="form-group">
+        <label class="control-label" for="phone">Telefon dagtid:</label>
+		<div class="controls">
+			<input type="tel" placeholder="Ditt telefonnummer inklusive riktnummer" name="phone" id="phone" class="form-control" #if($contactid==$contact.id)value="$phone"#end>
+		</div>
+      </div>
+
+      <div class="form-group #if($validationErrors.get("subject")&&$isChosenContact)warning#end">
+        <label class="control-label" for="subject">Meddelandet avser:*</label>
+        <div class="controls">
+          <select class="form-control" id="subject" name="subject">
+            <option value=""></option>
+            <option value="0" #if($isChosenContact && $subject=="0")selected#end>Felanmälan</option>
+            <option value="1" #if($isChosenContact && $subject=="1")selected#end>Fråga</option>
+            <option value="2" #if($isChosenContact && $subject=="2")selected#end>Annat</option>
+          </select>
+		  #if($validationErrors.get("subject")&&$isChosenContact)<div class="help-block">$validationErrors.get("subject")</div>#end
+        </div>
+      </div>
+
+      <div class="form-group #if($validationErrors.get("message")&&$isChosenContact)warning #end">
+        <label class="control-label" for="message">Meddelande:*</label>
+		<div class="controls">
+            <textarea placeholder="" class="form-control" rows="8" name="message" id="message">#if($isChosenContact)$message#end</textarea>
+    		#if($validationErrors.get("message")&&$isChosenContact)<div class="help-block">$validationErrors.get("message")</div>#end
+		</div>
+      </div>
+
+      <div class="form-group">
+        <span class="control-label"></span>
+        <div class="controls">
+          <input type="submit" class="btn btn-primary" value="Skicka in ditt meddelande">
+        </div>
+      </div>
+    </fieldset>
+  </form>
+
+

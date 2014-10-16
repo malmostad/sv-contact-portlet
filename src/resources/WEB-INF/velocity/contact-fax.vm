@@ -1,0 +1,3 @@
+#if ($contactObject.fax)
+<div class="fax">Fax: $contactObject.fax</div>
+#end
