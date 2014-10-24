@@ -354,30 +354,21 @@ public class ContactViewController extends ContactController {
             contactBox = (ContactBox)model.asMap().get(MA_CONTACTBOX);
         }
 
-        String district = getDistrictFromCookie(request);
-        if (district != null){
-        	if(!"\"\"".equals(district)){
-        		model.addAttribute(MA_DISTRICT, district);
-        	}                      	
-        }
-
         if (contactBox.isDistrictSelector())
             model.addAttribute(MA_DISTRICTS, getDistricts());
         
         // Create list with contacts to display
         List<Contact> contacts = new ArrayList<Contact>();
         Iterator<Contact> i = contactBox.getContacts().values().iterator();
+       
         int count = 0;
         while (i.hasNext()) {
             Contact contact = i.next();
-            if (isUseInContent() || !contactBox.isDistrictSelector() || (district != null && district.equals(contact.getDistrict()))) {            	
-                contact.setId(count);
-                contacts.add(contact);
-            }
+            contact.setId(count);
+            contacts.add(contact);
             count++;
         }        
         model.addAttribute(MA_CONTACTS, contacts);
-        
         
         model.addAttribute(MA_AREATYPENAME, "stadsområde");                
         
@@ -397,24 +388,6 @@ public class ContactViewController extends ContactController {
         
         return "contactBoxView";
     }   
-    
-    
-     
-            
-    protected String getDistrictFromCookie(PortletRequest request) {
-        Map<String, Cookie> cookies = getCookies(request);
-        Cookie cookie = cookies.get(DistrictController.COOKIE_DISTRICT);
-        if (cookie != null) {
-            try {
-                String value = URLDecoder.decode(cookie.getValue(), "UTF-8");
-                if (!value.isEmpty())
-                    return value; 
-            } catch (UnsupportedEncodingException e) {
-                logger.error(e.getMessage());
-            }
-        }
-        return null;
-    }
  
     private String createWriteToUsRenderURL(RenderRequest request) {
         Utils utils = (Utils)request.getAttribute("sitevision.utils");

@@ -1,33 +1,17 @@
-                <div class="district-selector">
-                    <form id="${prefix}-district-selector-form" method="post" action="/kontaktruta/select.do">
-                        <fieldset>
+          
+<form class="form-inline" id="choose-district">
+  <div class="form-group">           
+  	  <select name="district" class="form-control">           
+         #foreach($d in $districts.keySet())
+           <option value="$d"#if($district && $d == $district) selected="selected"#end>$districts.get($d)</option>
+	     #end
+      </select>
+  </div>
+  <div class="form-group">
+      <span role="status" aria-live="polite" class="ui-helper-hidden-accessible"></span><input type="text" class="form-control ui-autocomplete-input" placeholder="Hitta stadsområde via adress" autocomplete="off">
+  </div>
                         
-                            <select id="${prefix}-district" name="district">
-                            #foreach($d in $districts.keySet())
-                            	<option value="$d"#if($district && $d == $district) selected="selected"#end>$districts.get($d)</option>
-							#end
-                            </select>
-                            
-                            <input type="submit" name="select" value="OK" class="input-button" />
-                            
-                        </fieldset>
+</form>
 
-                        <fieldset class="only-js">
-							#if($areaTypeName)
-    							#if($areaTypeName=="stadsdel")
-    								#set( $fieldName = "district" )
-    							#else
-    								#set( $fieldName = "area" )
-    							#end							
-							#else
-								#set( $areaTypeName = "stadsdel" )
-								#set( $fieldName = "district" )
-							#end
-                            <label for="${prefix}-${fieldName}-search" class="district-search">Hitta ${areaTypeName} via gatuadress</label>
-                            <input type="text" id="${prefix}-${fieldName}-search" name="district-search" class="input-text" value="Skriv in en adress" onclick="if (this.value = 'Skriv in en adress') this.value='';" onkeypress="" />
-                        
-                        </fieldset>
                
-                    </form>
-                </div>
 				

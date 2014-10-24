@@ -1,5 +1,5 @@
 #if ($contactObject.visitingAddress)
-<h2 class="visiting-address">Besöksadress</h2>
+<h3 class="visiting-address">Besöksadress</h3>
 <div class="street-address">$contactObject.visitingAddress</div>
 <div>
 	<a class="show-on-map m-icon-location" title="$contactObject.visitingAddress" data-poi="$contactObject.visitingAddress" data-scroll-to=".visiting-address" data-map-selector=".contact-us-map" href="http://www.malmo.se/karta?poi=$esc.url($contactObject.visitingAddress)&zoomlevel=4&maptype=karta">Visa på karta</a>

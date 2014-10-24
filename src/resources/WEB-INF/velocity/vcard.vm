@@ -1,0 +1,13 @@
+	#set($firstContact = true)
+    #foreach($contact in $currentContacts)
+    	<div class="vcard" #if ($contactBox.districtSelector) id="district-$contact.district.toLowerCase()" style="display: none;" #end>
+    	#set ($contactObject = $contact.getContactObject($directoryUtil))    
+        #parse("contact-name.vm")
+    	#foreach($attr in $contact.attributes)
+    		#set ($view = "contact-${attr}.vm")
+    		#if($attr != "visitingAddress")
+    			#parse($view)
+    		#end
+    	#end    
+    	</div>
+    #end

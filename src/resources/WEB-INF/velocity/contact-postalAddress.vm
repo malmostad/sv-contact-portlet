@@ -1,11 +1,11 @@
 #if ($contactObject.postalAddress && $contactObject.postalCode)
-<h2>Postadress</h2>
+<h3>Postadress</h3>
 <div class="adr">
     <div class="fn">$contactObject.name</div>
     <div class="post-office-box">$contactObject.postalAddress</div>
 	<div>
 		<span class="postal-code">$contactObject.postalCode</span>
 	</div>
-    <div class="postal-code"></div>
+	#parse("contact-visitingAddress.vm")
 </div>
 #end
