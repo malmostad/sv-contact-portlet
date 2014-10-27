@@ -3,7 +3,7 @@
   <div class="form-group">           
   	  <select name="district" class="form-control">           
          #foreach($d in $districts.keySet())
-           <option value="$d"#if($district && $d == $district) selected="selected"#end>$districts.get($d)</option>
+           <option value="$d.toLowerCase()"#if($district && $d == $district) selected="selected"#end>$districts.get($d)</option>
 	     #end
       </select>
   </div>
