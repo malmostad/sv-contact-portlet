@@ -1,5 +1,3 @@
 #if ($contactObject.name)
-	#set ($url = $renderResponse.createActionURL())
-	$!url.setParameter("action", "writetous")
 <h2 class="fn">$contactObject.name</h2>
 #end

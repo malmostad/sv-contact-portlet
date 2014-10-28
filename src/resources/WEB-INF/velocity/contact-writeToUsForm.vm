@@ -1,36 +1,40 @@
-<form class="basic write-to-us-form" id="contact-us-form-template" method="post" action="$renderResponse.createActionURL()">
+<form class="basic write-to-us-form" id="contact-us-form-template" method="post" action="$writetousURL">
     <h2 class="group-title">Skriv till oss</h2>
 							
-      <div class="form-group">		
+      <div class="form-group #if($validationErrors.get("name"))warning#end">		
         <label class="control-label" for="name">Namn:*</label>
-        <input type="text" placeholder="Ditt för och efternamn" name="name" id="name" class="form-control controls">
+        <input type="text" placeholder="Ditt för och efternamn" name="name" id="name" class="form-control controls" value="$!name">
+        #if($validationErrors.get("name"))<div class="help-block">$validationErrors.get("name")</div>#end
       </div>
 
-      <div class="form-group">
+      <div class="form-group #if($validationErrors.get("email"))warning#end">
         <label class="control-label" for="email">E-post:</label>
-        <input type="email" placeholder="Din e-postadress" name="email" id="email" class="form-control controls">
+        <input type="email" placeholder="Din e-postadress" name="email" id="email" class="form-control controls" value="$!email">
+        #if($validationErrors.get("email"))<div class="help-block">$validationErrors.get("email")</div>#end
       </div>
 
       <div class="form-group">
         <label class="control-label" for="phone">Telefon dagtid:</label>
-		<input type="tel" placeholder="Ditt telefonnummer inklusive riktnummer" name="phone" id="phone" class="form-control controls">
+		<input type="tel" placeholder="Ditt telefonnummer inklusive riktnummer" name="phone" id="phone" class="form-control controls" value="$!phone">
       </div>
 
-      <div class="form-group">
+      <div class="form-group  #if($validationErrors.get("subject"))warning#end">
         <label class="control-label" for="subject">Meddelandet avser:*</label>
         <div class="controls">
-          <select class="form-control" id="subject" name="subject">
+          <select class="form-control" id="subject" name="subject" >
             <option value=""></option>
             <option value="0">Felanmälan</option>
             <option value="1">Fråga</option>
             <option value="2">Annat</option>
           </select>
+          #if($validationErrors.get("subject")&&$isChosenContact)<div class="help-block">$validationErrors.get("subject")</div>#end
         </div>
       </div>
 
-      <div class="form-group">
+      <div class="form-group #if($validationErrors.get("message"))warning #end">
         <label class="control-label" for="message">Meddelande:*</label>
-        <textarea placeholder="" class="form-control controls" rows="8" name="message" id="message"></textarea>
+        <textarea placeholder="" class="form-control controls" rows="8" name="message" id="message">$!message</textarea>
+        #if($validationErrors.get("message"))<div class="help-block">$validationErrors.get("message")</div>#end
       </div>
 
       <div class="form-group">

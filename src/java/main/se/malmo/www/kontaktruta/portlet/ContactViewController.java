@@ -205,7 +205,6 @@ public class ContactViewController extends ContactController {
         
         helper.setSubject(subject);
         helper.setText(body);
-        
         mailSender.send(mm);
     }
     
@@ -221,7 +220,8 @@ public class ContactViewController extends ContactController {
     
     
     @RequestMapping
-    public void processAction(Model model, PortletPreferences prefs, ActionRequest request, ActionResponse response) {    	    	
+    public void processAction(Model model, PortletPreferences prefs, ActionRequest request, ActionResponse response) {    	    
+    	
     	String name= request.getParameter("name");
     	String email = request.getParameter("email");
     	String contactid = request.getParameter("contactid");
@@ -393,8 +393,7 @@ public class ContactViewController extends ContactController {
         Utils utils = (Utils)request.getAttribute("sitevision.utils");
         PropertyUtil propertyUtil = utils.getPropertyUtil();
         Node currentPage = utils.getPortletContextUtil().getCurrentPage();
-        Node template = utils.getPropertyUtil().getNode(currentPage, "template");
-        Node portlet = utils.getNodeTreeUtil().findPortletByName(template, "Skriv till oss");
+        Node portlet = utils.getPortletContextUtil().getCurrentPortlet();
         
         /*
         // If portlet not found in page template try parent templates
@@ -412,9 +411,9 @@ public class ContactViewController extends ContactController {
         if (pageId.indexOf('_') > 0)
             pageId = pageId.substring(0, pageId.indexOf('_'));
         url.append(pageId);
-        url.append(".html");
-        url.append("?sv.url=");
+        url.append(".");
         url.append(propertyUtil.getString(portlet, "jcr:uuid"));
+        url.append(".portlet");
         
         return url.toString();
     }
