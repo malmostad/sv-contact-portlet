@@ -23,9 +23,9 @@
         <div class="controls">
           <select class="form-control" id="subject" name="subject" >
             <option value=""></option>
-            <option value="0">Felanmälan</option>
-            <option value="1">Fråga</option>
-            <option value="2">Annat</option>
+            <option value="0" #if($subject && $subject=="0")selected#end>Felanmälan</option>
+            <option value="1" #if($subject && $subject=="1")selected#end>Fråga</option>
+            <option value="2" #if($subject && $subject=="2")selected#end>Annat</option>
           </select>
           #if($validationErrors.get("subject")&&$isChosenContact)<div class="help-block">$validationErrors.get("subject")</div>#end
         </div>

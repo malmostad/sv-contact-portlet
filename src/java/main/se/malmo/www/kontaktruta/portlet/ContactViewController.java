@@ -8,6 +8,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -23,6 +24,7 @@ import javax.portlet.ActionResponse;
 import javax.portlet.PortletPreferences;
 import javax.portlet.PortletRequest;
 import javax.portlet.PortletSession;
+import javax.portlet.PortletURL;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 import javax.servlet.http.Cookie;
@@ -50,6 +52,7 @@ import se.malmo.www.kontaktruta.util.ContactBoxUtils;
 import se.malmo.www.skrivtilloss.exception.WriteToUsDeliveryException;
 import se.malmo.www.skrivtilloss.model.Message;
 import senselogic.sitevision.api.Utils;
+import senselogic.sitevision.api.context.PortletContextUtil;
 import senselogic.sitevision.api.property.PropertyUtil;
 import senselogic.sitevision.api.render.LinkRenderer;
 
@@ -68,6 +71,7 @@ public class ContactViewController extends ContactController {
     protected final static String MA_CONTACTBOX = "contactBox";
     protected final static String MA_CONTACTS = "currentContacts";
     protected final static String MA_AREATYPENAME = "areaTypeName";
+    protected final static String MAIL_RESPONSE_VIEW = "mailResponseView";
     
     public static final String WRITETOUS_PAGEID = "writeToUsPageId";
     public static final String WRITETOUS_CONTACT = "writeToUsContact";
@@ -205,7 +209,8 @@ public class ContactViewController extends ContactController {
         
         helper.setSubject(subject);
         helper.setText(body);
-        mailSender.send(mm);
+        System.out.println("...................................not sending mail to: " + to + " from: " + from + " because we're in test mode.");
+        //mailSender.send(mm);
     }
     
     private Contact getContact(PortletRequest request) {
@@ -218,16 +223,41 @@ public class ContactViewController extends ContactController {
         return null;
     }
     
+    @RequestMapping(params = "action=writetous")
+    public String doWriteToUsView(Model model, RenderRequest request, RenderResponse response, PortletSession session, PortletPreferences prefs) {        
+    	String viewName = handleMailAction(model, prefs, request, response, session);
+    	return viewName;
+    }
     
-    @RequestMapping
-    public void processAction(Model model, PortletPreferences prefs, ActionRequest request, ActionResponse response) {    	    
+    @RequestMapping(params = "action=writetous")
+    public void processWriteToUsAction(Model model, PortletPreferences prefs, ActionRequest request, ActionResponse response) {    
     	
     	String name= request.getParameter("name");
-    	String email = request.getParameter("email");
-    	String contactid = request.getParameter("contactid");
-    	String phone = request.getParameter("phone");
-    	String subject = request.getParameter("subject");
-    	String message = request.getParameter("message");
+		String email = request.getParameter("email");
+		String contactid = request.getParameter("contactid");
+		String phone = request.getParameter("phone");
+		String subject = request.getParameter("subject");
+		String message = request.getParameter("message");
+		
+		response.setRenderParameter("name", name);
+    	response.setRenderParameter("email", email);
+    	response.setRenderParameter("contactid", contactid);
+    	response.setRenderParameter("phone", phone);
+    	response.setRenderParameter("subject", subject);
+    	response.setRenderParameter("message",  message);
+    	
+    	response.setRenderParameter("action", "writetous");
+    }
+    
+    
+    public String handleMailAction(Model model, PortletPreferences prefs, RenderRequest request, RenderResponse response, PortletSession session) {    	    
+
+    	String name = request.getParameter("name");
+		String email = request.getParameter("email");
+		String contactid = request.getParameter("contactid");
+		String phone = request.getParameter("phone");
+		String subject = request.getParameter("subject");
+		String message = request.getParameter("message");
     	
     	boolean hasErrors = false;
     	boolean hasValidEmail = false;
@@ -259,7 +289,6 @@ public class ContactViewController extends ContactController {
     	
     	
        	//Spam check. If session time is too short, warn for spam and don't send message
-   	 	PortletSession session = request.getPortletSession();
         Utils utils = (Utils)request.getAttribute("sitevision.utils");
         long sessionLifetime = System.currentTimeMillis() - session.getCreationTime();
         if (sessionLifetime < MIN_SESSION_DURATION) {
@@ -270,7 +299,7 @@ public class ContactViewController extends ContactController {
         }            
    	
     	
-    	
+    	String responseView = "contact-writeToUsForm";
     	if(!hasErrors){
     		//No validation errors, let's send mail    		  
     		  Message messageToSend = new Message();
@@ -304,15 +333,8 @@ public class ContactViewController extends ContactController {
     	            sendMessageByMail(messageToSend, contact, contactObject, true);    	           
     	            // Set renderParamenter for confirm view
     	            model.addAttribute("contactid",contactid);
-    	            model.addAttribute("sendconfirm","Ditt meddelande har skickats till "+contactObject.getMail()+".");
-    	            
-    	            //Everything went OK  	            
-    	            model.addAttribute("name", "");    	
-    		    	model.addAttribute("email", "");    		    	
-    		    	model.addAttribute("phone","");
-    		    	model.addAttribute("subject","");
-    		    	model.addAttribute("message","");
-    		    	model.addAttribute("validationErrors",validationErrors);
+    	            model.addAttribute("sendConfirm","Ditt meddelande har skickats till "+contactObject.getMail()+".");
+    		    	responseView = "writeToUsSuccess";
     	        } catch (Exception e) {
     	            logger.error("Error sending mail - "+e.getMessage());
     	            model.addAttribute("senderror","Tekniskt fel, ditt meddelande kunde inte skickas, var vänlig försök igen senare");
@@ -322,7 +344,8 @@ public class ContactViewController extends ContactController {
     		    	model.addAttribute("phone",phone);
     		    	model.addAttribute("subject",subject);
     		    	model.addAttribute("message",message);
-    		    	model.addAttribute("validationErrors",validationErrors);    	            
+    		    	model.addAttribute("validationErrors",validationErrors);    	 
+    		    	model.addAttribute("writetousURL", createRenderActionURL(request, "writetous"));
     	        }    	      
     	}else{    	    	
     		//Validation errors, message will not be sent
@@ -334,8 +357,10 @@ public class ContactViewController extends ContactController {
 	    	model.addAttribute("subject",subject);
 	    	model.addAttribute("message",message);
 	    	model.addAttribute("validationErrors",validationErrors);
+	    	model.addAttribute("writetousURL", createRenderActionURL(request, "writetous"));
     	}
-    	
+
+    	return responseView; 
     }
     
     @RequestMapping // default
@@ -381,39 +406,39 @@ public class ContactViewController extends ContactController {
         linkRenderer.setOpenNewWindow(true);
         model.addAttribute("linkRenderer", linkRenderer);
         
-        model.addAttribute("writetousURL", createWriteToUsRenderURL(request));
+        model.addAttribute("writetousURL", createRenderActionURL(request, "writetous"));
+        //PortletURL url = response.createActionURL();
+        //url.setParameter("action", "writetous");
+        //model.addAttribute("writetousURL", url.toString());
         
         if (isUseInContent())
             model.addAttribute("useInContent", Boolean.TRUE);
         
+        String mailResponseView = request.getParameter(MAIL_RESPONSE_VIEW);
+        if (mailResponseView != null){
+        	System.out.println(".............................got mail view: " + mailResponseView);
+        	return mailResponseView;
+        }
+        System.out.println(".............................sending back standard view ");
         return "contactBoxView";
-    }   
+     }   
  
-    private String createWriteToUsRenderURL(RenderRequest request) {
+    
+    private String createRenderActionURL(RenderRequest request, String action) {
+    	
         Utils utils = (Utils)request.getAttribute("sitevision.utils");
         PropertyUtil propertyUtil = utils.getPropertyUtil();
-        Node currentPage = utils.getPortletContextUtil().getCurrentPage();
-        Node portlet = utils.getPortletContextUtil().getCurrentPortlet();
+        PortletContextUtil ctxUtil = utils.getPortletContextUtil();
+        Node currentPage = ctxUtil.getCurrentPage();
+        Node portlet = ctxUtil.getCurrentPortlet();
         
-        /*
-        // If portlet not found in page template try parent templates
-        while (portlet == null) {
-            template = utils.getPropertyUtil().getNode(template, "template");
-            if (template == null)
-                break;
-            portlet = utils.getNodeTreeUtil().findPortletByName(template, "Skriv till oss");
-        }
-        */
-        
-        StringBuilder url = new StringBuilder();
-        url.append('/');
-        String pageId = propertyUtil.getString(currentPage, "jcr:uuid");
-        if (pageId.indexOf('_') > 0)
-            pageId = pageId.substring(0, pageId.indexOf('_'));
-        url.append(pageId);
+        StringBuilder url = new StringBuilder("/");
+        String pathToPortlet = propertyUtil.getString(currentPage, "jcr:uuid");
+        url.append(pathToPortlet);
         url.append(".");
         url.append(propertyUtil.getString(portlet, "jcr:uuid"));
-        url.append(".portlet");
+        url.append(".portlet?action=");
+        url.append(action);
         
         return url.toString();
     }
