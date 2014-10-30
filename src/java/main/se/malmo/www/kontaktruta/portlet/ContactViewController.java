@@ -209,8 +209,7 @@ public class ContactViewController extends ContactController {
         
         helper.setSubject(subject);
         helper.setText(body);
-        System.out.println("...................................not sending mail to: " + to + " from: " + from + " because we're in test mode.");
-        //mailSender.send(mm);
+        mailSender.send(mm);
     }
     
     private Contact getContact(PortletRequest request) {
