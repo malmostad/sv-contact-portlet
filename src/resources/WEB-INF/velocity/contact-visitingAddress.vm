@@ -1,8 +1,10 @@
 #if ($contactObject.visitingAddress)
-<h3 class="visiting-address">Besöksadress</h3>
-<div class="street-address">$contactObject.visitingAddress</div>
-<div>
-	<a class="show-on-map m-icon-location" title="$contactObject.visitingAddress" data-poi="$contactObject.visitingAddress" data-scroll-to=".visiting-address" data-map-selector=".contact-us-map" href="http://www.malmo.se/karta?poi=$esc.url($contactObject.visitingAddress)&zoomlevel=4&maptype=karta">Visa på karta</a>
+<div class="adr">
+	<h3 class="visiting-address">Besöksadress</h3>
+	<div class="street-address">$contactObject.visitingAddress</div>
+	<div>
+		<a class="show-on-map m-icon-location" title="$contactObject.visitingAddress" data-poi="$contactObject.visitingAddress" data-scroll-to=".visiting-address.v-$contact.id" data-map-selector=".contact-us-map.m-$contact.id" href="http://www.malmo.se/karta?poi=$esc.url($contactObject.visitingAddress)&zoomlevel=4&maptype=karta">Visa på karta</a>
+	</div>
+	<div class="contact-us-map m-$contact.id"></div>
 </div>
-<div class="contact-us-map"></div>
 #end

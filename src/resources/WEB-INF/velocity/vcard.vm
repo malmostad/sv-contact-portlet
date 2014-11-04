@@ -5,9 +5,7 @@
         #parse("contact-name.vm")
     	#foreach($attr in $contact.attributes)
     		#set ($view = "contact-${attr}.vm")
-    		#if($attr != "visitingAddress")
-    			#parse($view)
-    		#end
+    		#parse($view)
     	#end    
     	</div>
     #end

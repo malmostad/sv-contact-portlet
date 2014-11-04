@@ -1,4 +1,1 @@
 <div class="success">$sendConfirm</div>
-<script type="text/javascript">
-		document.getElementById('contact-us-form-template').attributes['class'].value += ' svhidden';
-</script>

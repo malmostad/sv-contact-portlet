@@ -1,4 +1,4 @@
-<form class="basic write-to-us-form" id="contact-us-form-template" method="post" action="$writetousURL">
+<form class="basic write-to-us-form" #if(!$validationErrors.hasErrors()) id="contact-us-form-template" #else style="display:block;" #end method="post" action="$writetousURL">
     <h2 class="group-title">Skriv till oss</h2>
 							
       <div class="form-group #if($validationErrors.get("name"))warning#end">		
