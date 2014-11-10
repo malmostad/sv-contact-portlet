@@ -224,7 +224,7 @@ public class ContactViewController extends ContactController {
     
     @RequestMapping(params = "action=writetous")
     public String doWriteToUsView(Model model, RenderRequest request, RenderResponse response, PortletSession session, PortletPreferences prefs) {        
-    	String viewName = handleMailAction(model, prefs, request, response, session);
+    	String viewName = handleMailAction(model, prefs, request, response);
     	return viewName;
     }
     
@@ -249,7 +249,7 @@ public class ContactViewController extends ContactController {
     }
     
     
-    public String handleMailAction(Model model, PortletPreferences prefs, RenderRequest request, RenderResponse response, PortletSession session) {    	    
+    public String handleMailAction(Model model, PortletPreferences prefs, RenderRequest request, RenderResponse response) {    	    
 
     	String name = request.getParameter("name");
 		String email = request.getParameter("email");
@@ -288,6 +288,7 @@ public class ContactViewController extends ContactController {
     	
     	
        	//Spam check. If session time is too short, warn for spam and don't send message
+    	PortletSession session = request.getPortletSession();
         Utils utils = (Utils)request.getAttribute("sitevision.utils");
         long sessionLifetime = System.currentTimeMillis() - session.getCreationTime();
         if (sessionLifetime < MIN_SESSION_DURATION) {
@@ -406,19 +407,14 @@ public class ContactViewController extends ContactController {
         model.addAttribute("linkRenderer", linkRenderer);
         
         model.addAttribute("writetousURL", createRenderActionURL(request, "writetous"));
-        //PortletURL url = response.createActionURL();
-        //url.setParameter("action", "writetous");
-        //model.addAttribute("writetousURL", url.toString());
         
         if (isUseInContent())
             model.addAttribute("useInContent", Boolean.TRUE);
         
         String mailResponseView = request.getParameter(MAIL_RESPONSE_VIEW);
         if (mailResponseView != null){
-        	System.out.println(".............................got mail view: " + mailResponseView);
         	return mailResponseView;
         }
-        System.out.println(".............................sending back standard view ");
         return "contactBoxView";
      }   
  
