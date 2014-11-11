@@ -78,7 +78,7 @@ public class ContactViewController extends ContactController {
     
     public static final String[] MESSAGE_SUBJECTS = {"Felanmälan","Fråga","Annat"};
     
-    private static final long MIN_SESSION_DURATION = 3000;
+    private static final long MIN_SESSION_DURATION = 15000;
     
     
     private VelocityEngine velocityEngine;

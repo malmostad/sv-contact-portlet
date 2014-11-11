@@ -1,6 +1,10 @@
 <form class="basic write-to-us-form" #if(!$validationErrors.hasErrors()) id="contact-us-form-template" #else style="display:block;" #end method="post" action="$writetousURL">
     <h2 class="group-title">Skriv till oss</h2>
-							
+	  
+	  #if($senderror)
+	      <div class="error">$senderror</div>
+	  #end
+	
       <div class="form-group #if($validationErrors.get("name"))warning#end">		
         <label class="control-label" for="name">Namn:*</label>
         <input type="text" placeholder="Ditt för och efternamn" name="name" id="name" class="form-control controls" value="$!name">
