@@ -1,0 +1,6 @@
+#if ($contactObject.visitingHours)
+<div>Besökstider:</div>
+	#foreach($visitingHour in $contactObject.visitingHours)
+<div>$visitingHour</div>
+	#end
+#end

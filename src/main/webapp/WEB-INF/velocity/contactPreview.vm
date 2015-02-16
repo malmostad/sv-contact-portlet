@@ -1,0 +1,8 @@
+#set ($contactObject = $contact.getContactObject($apiContact))
+<dl>
+	#parse("contact-name.vm")
+	#foreach($attr in $contact.attributes)
+		#set ($view = "contact-${attr}.vm")
+		#parse($view)
+	#end
+</dl>

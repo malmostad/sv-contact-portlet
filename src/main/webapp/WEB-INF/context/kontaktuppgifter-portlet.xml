@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans" 
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:p="http://www.springframework.org/schema/p" 
+        xmlns:util="http://www.springframework.org/schema/util"
+        xmlns:context="http://www.springframework.org/schema/context"
+    xsi:schemaLocation="
+    http://www.springframework.org/schema/beans 
+    http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+    http://www.springframework.org/schema/util 
+    http://www.springframework.org/schema/util/spring-util-4.0.xsd
+    http://www.springframework.org/schema/context 
+    http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+
+  <context:annotation-config/>
+  <context:component-scan base-package="se.malmo.www.kontaktruta.service"/>
+  <context:property-placeholder location="/WEB-INF/kontaktruta.properties" />
+      
+  
+  <bean class="org.springframework.web.portlet.mvc.annotation.DefaultAnnotationHandlerMapping">
+    <property name="interceptors">
+      <!-- This interceptor forwards the mapping request parameter from an ActionRequest to be used as a render parameter. -->
+      <bean class="org.springframework.web.portlet.handler.ParameterMappingInterceptor"/>
+    </property>
+  </bean>
+
+  <bean class="se.malmo.www.kontaktruta.portlet.ContactConfigController">
+  	<property name="useInContent" value="true" />
+  </bean>
+
+  <bean class="se.malmo.www.kontaktruta.portlet.ContactViewController">
+  	<property name="useInContent" value="true" />
+  </bean>
+
+</beans>

@@ -1,6 +1,0 @@
-#if ($contactObject.telephoneHours) 
-<div>Telefontider</div>
-	#foreach($telephoneHour in $contactObject.telephoneHours)
-<div>$telephoneHour</div>
-	#end
-#end
