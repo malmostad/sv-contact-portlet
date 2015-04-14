@@ -1,16 +1,19 @@
-
-#if ($contactObject.postalAddress)
+#if ($contactObject.postalAddress || 
+    $contactObject.postalCode || 
+    $contactObject.town)
 <h3>Postadress</h3>
 <div class="adr">
     <div class="fn">$contactObject.name</div>
-    <div class="post-office-box">$contactObject.postalAddress</div>
-	<div>
-                #if ($contactObject.postalCode)
-                    <span class="postal-code">$contactObject.postalCode</span>
-                #end
-                #if ($contactObject.town)
-                    <span class="locality">$contactObject.town</span>
-                #end
-	</div>
+    #if ($contactObject.postalAddress)
+        <div class="post-office-box">$contactObject.postalAddress</div>
+    #end
+    <div>
+            #if ($contactObject.postalCode)
+                <span class="postal-code">$contactObject.postalCode</span>
+            #end
+            #if ($contactObject.town)
+                <span class="locality">$contactObject.town</span>
+            #end
+    </div>
 </div>
 #end
