@@ -4,7 +4,7 @@
 #end
 <aside class="$asideClass">
 	#if (!$useInContent)   
-    <h1>Kontakta oss</h1>    
+    <h1>$contactUsHeader</h1>    
     #end         
     #if (($contactBox.text && $contactBox.text.length() > 0) && (($contactBox.districtSelector && $district) || !$contactBox.districtSelector))
      <p>$contactBox.text</p>

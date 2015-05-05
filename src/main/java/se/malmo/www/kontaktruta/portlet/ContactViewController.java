@@ -37,6 +37,7 @@ import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
 import org.datacontract.schemas._2004._07.primesystems_primecasecore.Form;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Controller;
@@ -68,6 +69,8 @@ import senselogic.sitevision.api.render.LinkRenderer;
 @RequestMapping("VIEW")
 public class ContactViewController extends ContactController {
     private final Log logger = LogFactory.getLog(this.getClass());
+    
+    @Value("${kontaktruta.contact_us_header}") private String contactUsHeader;
     
     public static final String CONTACT_ID = "contactid";
     protected final static String MA_DISTRICT = "district";
@@ -425,6 +428,8 @@ public class ContactViewController extends ContactController {
         model.addAttribute("linkRenderer", linkRenderer);
         
         model.addAttribute("writetousURL", createRenderActionURL(request, "writetous"));
+        
+        model.addAttribute("contactUsHeader", contactUsHeader);
         
         if (isUseInContent())
             model.addAttribute("useInContent", Boolean.TRUE);
