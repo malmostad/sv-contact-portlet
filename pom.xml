@@ -28,6 +28,7 @@
         <commons-http-client.version>3.1</commons-http-client.version>
         <velocity-tools-view.version>1.4</velocity-tools-view.version>
         <ehcache-spring-annotations.version>1.2.0</ehcache-spring-annotations.version>
+        <maven-war-plugin.version>2.6</maven-war-plugin.version>
     </properties>
 
     <dependencies>
@@ -164,7 +165,101 @@
         </dependency>
         
     </dependencies>
-
+    
+    <profiles>
+        <profile>
+            <id>malmo-external-prod</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-war-plugin</artifactId>
+                        <version>${maven-war-plugin.version}</version>
+                        <configuration>
+                            <webResources>
+                                <resource>
+                                    <directory>config/external/prod</directory>
+                                    <includes>
+                                        <include>**/kontaktruta.properties</include>
+                                    </includes>
+                                    <targetPath>WEB-INF</targetPath>
+                                </resource>
+                            </webResources>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>malmo-external-test</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-war-plugin</artifactId>
+                        <version>${maven-war-plugin.version}</version>
+                        <configuration>
+                            <webResources>
+                                <resource>
+                                    <directory>config/external/test</directory>
+                                    <includes>
+                                        <include>**/kontaktruta.properties</include>
+                                    </includes>
+                                    <targetPath>WEB-INF</targetPath>
+                                </resource>
+                            </webResources>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>malmo-komin-prod</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-war-plugin</artifactId>
+                        <version>${maven-war-plugin.version}</version>
+                        <configuration>
+                            <webResources>
+                                <resource>
+                                    <directory>config/komin/prod</directory>
+                                    <includes>
+                                        <include>**/kontaktruta.properties</include>
+                                    </includes>
+                                    <targetPath>WEB-INF</targetPath>
+                                </resource>
+                            </webResources>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>malmo-komin-test</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-war-plugin</artifactId>
+                        <version>${maven-war-plugin.version}</version>
+                        <configuration>
+                            <webResources>
+                                <resource>
+                                    <directory>config/komin/test</directory>
+                                    <includes>
+                                        <include>**/kontaktruta.properties</include>
+                                    </includes>
+                                    <targetPath>WEB-INF</targetPath>
+                                </resource>
+                            </webResources>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
     <build>
         <plugins>
             <plugin>
@@ -186,7 +281,7 @@
                 <configuration>
                     <failOnMissingWebXml>false</failOnMissingWebXml>
                     <warName>kontaktruta</warName>
-                    <outputDirectory>C:\sitevision\tomcat\webapps</outputDirectory>
+                    <outputDirectory>${basedir}/target</outputDirectory>
                 </configuration>
             </plugin>
             <plugin>
