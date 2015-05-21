@@ -16,7 +16,7 @@ The application contains a portlet (kontaktruta-stadsomraden) and a servlet (dis
  
  
 ## Development
-The project can be imported into Eclipse as a Java project
+The project can be imported into Eclipse or Netbeans as a Maven project
 
 ## Licence
 Released under AGPL version 3.
