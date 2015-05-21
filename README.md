@@ -7,13 +7,12 @@ The application contains a portlet (kontaktruta-stadsomraden) and a servlet (dis
 
 ## Dependencies
 * Sitevision Server 3
-* Ant
+* Maven 3
 
 ## Build & Deployment
-* Use the `config/kontaktruta.properties.example` as a template and copy it to the folder that corresponds to the environment that you are going to build the project for, for example `config/test/kontaktruta.properties`. Update `kontaktruta.properties` with current passwords and URLs but do not commit the file to source control.
-* in the folder `/src/build` run the command `ant -Dsitevision.dir=[Path to Sitevision server] compile-deploy-[dev/prod/test]` for example `C:\git\sitevision-contact-portlet\src\build>ant -Dsitevision.dir=c:/Sitevision compile-deploy-dev`
-* Deploy manually to the server by copying the resulting file `/dist/kontaktruta` to `[Path to Sitevision server]/tomcat/webapps`
-* (Optionally, to have Ant deploy directly to the server: modify the Deploy-* target in the `/src/build/build.xml` file by uncommenting the SCP Task and entering current password/username to the server)  
+* Use the `config/kontaktruta.properties.example` as a template and copy it to the folder that corresponds to the environment that you are going to build the project for, for example `config/external/test/kontaktruta.properties`. Update `kontaktruta.properties` with current passwords and URLs but do not commit the file to source control.
+* in the project's folder, run the command `mvn -P[malmo-komin-prod/malmo-komin-test/malmo-external-prod/malmo-external-test] clean install` for example `C:\git\sitevision-contact-portlet>mvn -Pmalmo-external-test clean install`
+* Deploy manually to the server by copying the resulting file `/target/kontaktruta.war` to `[Path to Sitevision server]/tomcat/webapps`
  
  
 ## Development
