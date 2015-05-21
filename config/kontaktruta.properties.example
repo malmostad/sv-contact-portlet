@@ -1,3 +1,4 @@
+kontaktruta.contact_us_header=Kontakta oss
 streets.url=jdbc:oracle:thin:@XXX.XX.XX.XXX:XXXX:dbname
 streets.username=XXX
 streets.password=XXX
