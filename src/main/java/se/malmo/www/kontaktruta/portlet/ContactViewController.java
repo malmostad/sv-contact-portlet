@@ -71,6 +71,7 @@ public class ContactViewController extends ContactController {
     private final Log logger = LogFactory.getLog(this.getClass());
     
     @Value("${kontaktruta.contact_us_header}") private String contactUsHeader;
+    @Value("${kontaktruta.link_email}") private boolean linkEmail;
     
     public static final String CONTACT_ID = "contactid";
     protected final static String MA_DISTRICT = "district";
@@ -430,6 +431,7 @@ public class ContactViewController extends ContactController {
         model.addAttribute("writetousURL", createRenderActionURL(request, "writetous"));
         
         model.addAttribute("contactUsHeader", contactUsHeader);
+        model.addAttribute("linkEmail", linkEmail);
         
         if (isUseInContent())
             model.addAttribute("useInContent", Boolean.TRUE);

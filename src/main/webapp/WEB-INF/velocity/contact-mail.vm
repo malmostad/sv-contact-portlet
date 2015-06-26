@@ -10,6 +10,10 @@
 		#set ($mail = $contactObject.mail)
 	#end
 <div>E-post: 
-	<span class="email">$mail</span>
+    #if ($linkEmail) 
+        <span class="email"><a href="mailto:$mail">$mail</a></span>
+    #else
+        <span class="email">$mail</span>
+    #end
 </div>
 #end
