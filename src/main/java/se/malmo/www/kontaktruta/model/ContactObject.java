@@ -3,6 +3,7 @@
  */
 package se.malmo.www.kontaktruta.model;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import org.apache.commons.logging.Log;
@@ -33,13 +34,15 @@ public class ContactObject {
     private Boolean primecase;
     private String cn;
     private String guid;
+    private String defaultAvatar;
+    private List<AvatarObject> avatarList;
 
-    
-    
     public ContactObject(Contact contact, APIContact apiContact) {
         super();
         this.contact = contact;
         this.apiContact = apiContact;
+        avatarList = new ArrayList<AvatarObject>();
+        getAvatarList();
     }
     
     public String getName() {
@@ -173,6 +176,35 @@ public class ContactObject {
             // possible fix create a UUID.
         }
         return guid;
+    }
+    
+    public String getDefaultAvatar() {
+        if(defaultAvatar == null && apiContact != null 
+                && checkValue(apiContact.getAvatars().getSmall())) {
+            
+            defaultAvatar = apiContact.getAvatars().getSmall();
+        }
+        return defaultAvatar;
+    }
+    
+    public List<AvatarObject> getAvatarList() {
+        if(avatarList.isEmpty() && apiContact != null
+                && apiContact.getAvatars() != null) {
+            Avatars avatars = apiContact.getAvatars();
+            if(checkValue(avatars.getXlarge())) {
+                avatarList.add(new AvatarObject(avatars.getXlarge(), "600"));
+            }
+            if(checkValue(avatars.getLarge())) {
+                avatarList.add(new AvatarObject(avatars.getLarge(), "300"));
+            }
+            if(checkValue(avatars.getMedium())) {
+                avatarList.add(new AvatarObject(avatars.getMedium(), "180"));
+            }
+            if(checkValue(avatars.getSmall())) {
+                avatarList.add(new AvatarObject(avatars.getSmall(), "120"));
+            }
+        }
+        return avatarList;
     }
     
     private boolean checkValue(String value){

@@ -72,6 +72,7 @@ public class ContactViewController extends ContactController {
     
     @Value("${kontaktruta.contact_us_header}") private String contactUsHeader;
     @Value("${kontaktruta.link_email}") private boolean linkEmail;
+    @Value("${kontaktruta.show_avatar}") private boolean showAvatar;
     
     public static final String CONTACT_ID = "contactid";
     protected final static String MA_DISTRICT = "district";
@@ -432,6 +433,7 @@ public class ContactViewController extends ContactController {
         
         model.addAttribute("contactUsHeader", contactUsHeader);
         model.addAttribute("linkEmail", linkEmail);
+        model.addAttribute("showAvatar", showAvatar);
         
         if (isUseInContent())
             model.addAttribute("useInContent", Boolean.TRUE);

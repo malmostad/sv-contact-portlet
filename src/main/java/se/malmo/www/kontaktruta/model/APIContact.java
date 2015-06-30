@@ -36,6 +36,7 @@ public class APIContact extends APISuggestion {
     @Getter @Setter protected String legacy_dn;    
     @Getter @Setter protected String homepage;
     @Getter @Setter protected boolean primecase;
+    @Getter @Setter protected Avatars avatars;
     
     public String getVisitingAddress(){
         if (visiting != null){
@@ -43,7 +44,7 @@ public class APIContact extends APISuggestion {
         }
         return null;
     }
-    
+        
     @Override
     public String getName(){
         if (name != null && name.length() > 0){

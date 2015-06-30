@@ -71,6 +71,8 @@ public class ContactConfigController extends ContactController {
     @Value("${searchBaseFunction}")
     private String searchBaseFunction;
     
+    @Value("${kontaktruta.show_avatar}") 
+    private Boolean showAvatar;
     
     /**
      * 
@@ -82,6 +84,7 @@ public class ContactConfigController extends ContactController {
         types.put("2", "Funktion");
         
         attributes = new LinkedHashMap<String,String>();
+        attributes.put("avatar", "Visningsbild");
         attributes.put("title", "Titel");
         attributes.put("mail", "E-post");
         attributes.put("telephone", "Fast telefon");
@@ -97,8 +100,13 @@ public class ContactConfigController extends ContactController {
     
     @RequestMapping // default
     public String doConfig(Model model, PortletPreferences prefs, RenderRequest request, RenderResponse response) {
-     
+        
         Utils utils = (Utils)request.getAttribute("sitevision.utils");
+        
+        // Remove the avatar option to be selectable in the config view 
+        if(!showAvatar) {
+            attributes.remove("avatar");
+        }
         
         ContactBox contactBox = null;
         if (!model.containsAttribute("contactBox")) {
@@ -210,7 +218,7 @@ public class ContactConfigController extends ContactController {
         model.addAttribute("types", types);
         model.addAttribute("attributes", attributes);
         model.addAttribute("action", "modify");
-       	model.addAttribute("areaTypeName", "stadsområde");              
+       	model.addAttribute("areaTypeName", "stadsområde");
         if (isUseInContent()) 
             model.addAttribute("useInContent", Boolean.TRUE);
             
@@ -273,6 +281,7 @@ public class ContactConfigController extends ContactController {
         linkRenderer.setRel("external");
         linkRenderer.setOpenNewWindow(true);
         model.addAttribute("linkRenderer", linkRenderer);
+        model.addAttribute("showAvatar", showAvatar);
         if (isUseInContent())
             model.addAttribute("useInContent", Boolean.TRUE);
 
