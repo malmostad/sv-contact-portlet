@@ -35,6 +35,7 @@ public class ContactObject {
     private String cn;
     private String guid;
     private String defaultAvatar;
+    private String contactCard;
     private List<AvatarObject> avatarList;
 
     public ContactObject(Contact contact, APIContact apiContact) {
@@ -176,6 +177,13 @@ public class ContactObject {
             // possible fix create a UUID.
         }
         return guid;
+    }
+    
+    public String getContactCard() {
+        if (contactCard == null && apiContact != null && checkValue(apiContact.getContact_card())) {
+            contactCard = apiContact.getContact_card();
+        }
+        return contactCard;
     }
     
     public String getDefaultAvatar() {

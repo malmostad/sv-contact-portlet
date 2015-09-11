@@ -36,6 +36,7 @@ public class APIContact extends APISuggestion {
     @Getter @Setter protected String legacy_dn;    
     @Getter @Setter protected String homepage;
     @Getter @Setter protected boolean primecase;
+    @Getter @Setter protected String contact_card;
     @Getter @Setter protected Avatars avatars;
     
     public String getVisitingAddress(){
