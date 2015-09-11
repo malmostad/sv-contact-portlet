@@ -1,5 +1,7 @@
 kontaktruta.contact_us_header=Kontakta oss
 kontaktruta.link_email=true
+kontaktruta.link_username=true
+kontaktruta.show_avatar=true
 
 streets.url=jdbc:oracle:thin:@XXX.XX.XX.XXX:XXXX:dbname
 streets.username=XXX
@@ -13,3 +15,5 @@ onlyMail=false
 
 searchBasePerson=ou=personal,o=malmo
 searchBaseFunction=ou=SiteVision,o=malmo
+
+contact.api.baseurl=http://XX.XX

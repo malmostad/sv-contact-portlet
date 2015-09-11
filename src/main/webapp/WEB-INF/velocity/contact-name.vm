@@ -1,3 +1,7 @@
 #if ($contactObject.name)
-<h2 class="fn">$contactObject.name</h2>
+    #if ($linkUsername) 
+        <h2 class="fn"><a href="$contactObject.contactCard">$contactObject.name</a></h2>
+    #else
+        <h2 class="fn">$contactObject.name</h2>
+    #end
 #end
