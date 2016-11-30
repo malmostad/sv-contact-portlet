@@ -21,6 +21,7 @@ public class ContactBox implements Serializable {
     
     @Getter @Setter private boolean inheritance;
     @Getter @Setter private boolean districtSelector;
+    @Getter @Setter private boolean emailRequired;
     @Getter @Setter private String text;
     @Getter @Setter private Map<ContactKey, Contact> contacts = new LinkedHashMap<ContactKey, Contact>();
 }

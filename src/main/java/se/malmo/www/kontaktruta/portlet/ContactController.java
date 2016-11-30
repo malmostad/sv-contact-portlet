@@ -67,6 +67,7 @@ public class ContactController implements PortletContextAware {
     
     public final static String CONTACTS_PREF = "contacts";
     public final static String DISTRICTSELECTOR_PREF = "districtSelector";
+    public final static String EMAIL_REQ = "emailRequired";
     public final static String TEXT_PREF = "text";
     public final static String META_NAME = "metaname";
     
@@ -192,6 +193,7 @@ public class ContactController implements PortletContextAware {
                 contactBox.setInheritance(false);
             }
             contactBox.setDistrictSelector(Boolean.parseBoolean(prefs.getValue(DISTRICTSELECTOR_PREF, "false")));
+            contactBox.setEmailRequired(Boolean.parseBoolean(prefs.getValue(EMAIL_REQ, "false")));
             contactBox.setText(prefs.getValue(TEXT_PREF, ""));
     
             // Get contacts from metadata
@@ -248,7 +250,8 @@ public class ContactController implements PortletContextAware {
                 metaUtil.setMetadataPropertyValue(currentPage, metadataName, gson.toJson(contacts));
             }
             
-            prefs.setValue(DISTRICTSELECTOR_PREF, contactBox.isDistrictSelector() ? "true" : "false");            
+            prefs.setValue(DISTRICTSELECTOR_PREF, contactBox.isDistrictSelector() ? "true" : "false");
+            prefs.setValue(EMAIL_REQ, contactBox.isEmailRequired() ? "true": "false");
             prefs.setValue(TEXT_PREF, contactBox.getText());
         }
         prefs.store();        

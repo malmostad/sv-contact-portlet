@@ -12,7 +12,13 @@
       </div>
 
       <div class="form-group #if($validationErrors.get("email"))warning#end">
-        <label class="control-label" for="email">E-post:</label>
+       #set ( $emailTag = "E-post:" )
+          #if($emailRequired == "true")
+              #set ( $emailTag = "E-post:*" )
+          #end
+        <label class="control-label" for="email">$emailTag</label>
+
+
         <input type="email" placeholder="Din e-postadress" name="email" id="email" class="form-control controls" value="$!email">
         #if($validationErrors.get("email"))<div class="help-block">$validationErrors.get("email")</div>#end
       </div>

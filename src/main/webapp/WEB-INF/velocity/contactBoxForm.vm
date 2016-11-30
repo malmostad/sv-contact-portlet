@@ -13,7 +13,13 @@
 			<input type="hidden" name="_$status.expression" />
 			<input type="checkbox" id="$status.expression" name="$status.expression" value="true"#if ($status.value == "true") checked="checked"#end />
 			<label class="label" for="$status.expression">${areaTypeName}sväljare</label>
-		</div>	
+		</div>
+        #springBind( "contactBox.emailRequired" )
+        <div>
+            <input type="hidden" name="_$status.expression" />
+            <input type="checkbox" id="$status.expression" name="$status.expression" value="true"#if ($status.value == "true") checked="checked"#end />
+            <label class="label" for="$status.expression">Kräv epost</label>
+        </div>
 		#springBind( "contactBox.text" )		
 		<div style="padding-top:5px;">
 			<label class="label" for="text">Fritext</label>

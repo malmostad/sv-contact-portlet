@@ -16,7 +16,7 @@
         <com.google.code.json.version>2.2.4</com.google.code.json.version>
         <springframework.version>4.1.1.RELEASE</springframework.version>
         <portlet.api.version>1.0</portlet.api.version>
-        <sitevision.public-api.version>3.0</sitevision.public-api.version>
+        <sitevision.public-api.version>3.6.7</sitevision.public-api.version>
         <velocity.version>1.7</velocity.version>
         <servlet-api.version>2.4</servlet-api.version>
         <java.mail.version>1.4.7</java.mail.version>

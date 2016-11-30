@@ -259,7 +259,7 @@ public class ContactViewController extends ContactController {
     	response.setRenderParameter("action", "writetous");
     }
     
-    
+    //validering av formulär, fyrar av nytt formulär om fel
     public String handleMailAction(Model model, PortletPreferences prefs, RenderRequest request, RenderResponse response) {    	    
 
     	String name = request.getParameter("name");
@@ -278,7 +278,7 @@ public class ContactViewController extends ContactController {
     		validationErrors.put("name","Fältet Namn får inte vara tomt");
     		hasErrors = true;
     	}
-    	if(!isEmptyOrNull(email)){
+    	if(!isEmptyOrNull(email) || Boolean.parseBoolean(prefs.getValue(EMAIL_REQ,"false"))){ //om epost är ifylld måste den vara korrekt.
 	    	if(!isValidEmailAddress(email)){
 	    		validationErrors.put("email","Fältet E-post måste vara korrekt ifyllt");
 	    		hasErrors = true;
@@ -360,6 +360,7 @@ public class ContactViewController extends ContactController {
     		    	model.addAttribute("message",message);
     		    	model.addAttribute("validationErrors",validationErrors);    	 
     		    	model.addAttribute("writetousURL", createRenderActionURL(request, "writetous"));
+                    model.addAttribute("emailRequired", prefs.getValue(EMAIL_REQ, "false"));
     	        }    	      
     	}else{    	    	
     		//Validation errors, message will not be sent
@@ -372,6 +373,7 @@ public class ContactViewController extends ContactController {
 	    	model.addAttribute("message",message);
 	    	model.addAttribute("validationErrors",validationErrors);
 	    	model.addAttribute("writetousURL", createRenderActionURL(request, "writetous"));
+            model.addAttribute("emailRequired", prefs.getValue(EMAIL_REQ, "false"));
     	}
 
     	return responseView; 
@@ -436,7 +438,7 @@ public class ContactViewController extends ContactController {
         model.addAttribute("linkEmail", linkEmail);
         model.addAttribute("linkUsername", linkUsername);
         model.addAttribute("showAvatar", showAvatar);
-        
+        model.addAttribute("emailRequired", prefs.getValue(EMAIL_REQ, "false"));
         if (isUseInContent())
             model.addAttribute("useInContent", Boolean.TRUE);
         
