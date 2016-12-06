@@ -2,7 +2,7 @@ kontaktruta.contact_us_header=Kontakta oss
 kontaktruta.link_email=true
 kontaktruta.link_username=true
 kontaktruta.show_avatar=true
-
+kontaktruta.require_email=true
 streets.url=jdbc:oracle:thin:@XXX.XX.XX.XXX:XXXX:dbname
 streets.username=XXX
 streets.password=XXX

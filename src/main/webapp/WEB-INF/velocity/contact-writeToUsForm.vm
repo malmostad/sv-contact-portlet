@@ -13,7 +13,7 @@
 
       <div class="form-group #if($validationErrors.get("email"))warning#end">
        #set ( $emailTag = "E-post:" )
-          #if($emailRequired == "true")
+          #if($reqEmail == "true")
               #set ( $emailTag = "E-post:*" )
           #end
         <label class="control-label" for="email">$emailTag</label>

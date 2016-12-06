@@ -32,11 +32,6 @@
 				<value></value>
 				<read-only>true</read-only>
 			</preference>
-			<preference>
-				<name>emailRequired</name>
-				<value>false</value>
-				<read-only>true</read-only>
-			</preference>
       	</portlet-preferences>
       	<sv:window>
       		<sv:portlet-mode>config</sv:portlet-mode>
