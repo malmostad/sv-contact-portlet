@@ -5,10 +5,18 @@
     	
     	#set ($contactObject = $contactObjectList.get($contact.getKey()))    
         <div class="vcard" #if ($contactBox.districtSelector) id="district-$contact.district.toLowerCase()" style="display: none;" #end>
+             #foreach($attr in $contact.attributes)
+                #if ($attr == "avatar")
+                    #set ($view = "contact-${attr}.vm")
+                    #parse($view)
+                 #end
+            #end
             #parse("contact-name.vm")
     	    #foreach($attr in $contact.attributes)
-    		#set ($view = "contact-${attr}.vm")
-    		#parse($view)
+    	        #if ($attr != "avatar")
+                    #set ($view = "contact-${attr}.vm")
+                    #parse($view)
+                 #end
     	    #end    
         </div>
     #end
