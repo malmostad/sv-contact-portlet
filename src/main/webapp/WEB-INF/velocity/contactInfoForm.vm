@@ -1,5 +1,5 @@
 #parse("head.vm")
-<form id="configForm" action="$renderResponse.createActionURL()" method="post">
+<form id="configForm" action="$actionUrl" method="post">
 	<fieldset style="padding:5px">
 		<legend>Kontaktuppgifter</legend>
 		<div style="padding-top:5px;">

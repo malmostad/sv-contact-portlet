@@ -15,13 +15,9 @@ import java.util.Map;
 
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
-import javax.portlet.ActionRequest;
-import javax.portlet.ActionResponse;
-import javax.portlet.PortletMode;
-import javax.portlet.PortletModeException;
-import javax.portlet.PortletPreferences;
-import javax.portlet.RenderRequest;
-import javax.portlet.RenderResponse;
+import javax.portlet.*;
+import javax.sound.sampled.Port;
+
 import net.sf.ehcache.Cache;
 
 import org.apache.commons.lang.text.StrSubstitutor;
@@ -100,83 +96,113 @@ public class ContactConfigController extends ContactController {
     
     @RequestMapping // default
     public String doConfig(Model model, PortletPreferences prefs, RenderRequest request, RenderResponse response) {
-        
-        Utils utils = (Utils)request.getAttribute("sitevision.utils");
-        
-        // Remove the avatar option to be selectable in the config view 
-        if(!showAvatar) {
-            attributes.remove("avatar");
-        }
-        
-        ContactBox contactBox = null;
-        if (!model.containsAttribute("contactBox")) {
-            contactBox = loadContactBox(request, prefs);
-            model.addAttribute("contactBox", contactBox);
-        }
-        else {
-            contactBox = (ContactBox) model.asMap().get("contactBox");
-        }
-        
-        Map<String,String> districts = getDistricts();        
-        Map<String,String> contacts = new LinkedHashMap<String, String>();
-        Iterator<Contact> i = contactBox.getContacts().values().iterator();
-        
-        while (i.hasNext()) {
-            Contact contact = i.next();
-            APIContact apiContact = findContact(contact);
-            if (apiContact == null){
-                Logger.getLogger(ContactViewController.class).error("No related contact in contact api for id: " + contact.getDn());
-                continue;
-            } 
-            ContactObject co = contact.getContactObject(apiContact);
-            String key = gson.toJson(contact.getKey()).toString().replaceAll("\"", "&#34;");
-            StringBuilder value = new StringBuilder();
-            value.append(co.getName());
-            if (contactBox.isDistrictSelector()) {
-                value.append(", ");
-                value.append(districts.get(contact.getDistrict()));
+        if(request.getPortletMode().toString().equals("config")) {
+            Utils utils = (Utils) request.getAttribute("sitevision.utils");
+
+            // Remove the avatar option to be selectable in the config view
+            if (!showAvatar) {
+                attributes.remove("avatar");
             }
-            contacts.put(key, value.toString());
-            
+
+            ContactBox contactBox = null;
+            if (!model.containsAttribute("contactBox")) {
+                contactBox = loadContactBox(request, prefs);
+                model.addAttribute("contactBox", contactBox);
+            } else {
+                contactBox = (ContactBox) model.asMap().get("contactBox");
+            }
+
+            Map<String, String> districts = getDistricts();
+            Map<String, String> contacts = new LinkedHashMap<String, String>();
+            Iterator<Contact> i = contactBox.getContacts().values().iterator();
+
+            while (i.hasNext()) {
+                Contact contact = i.next();
+                APIContact apiContact = findContact(contact);
+                if (apiContact == null) {
+                    Logger.getLogger(ContactViewController.class).error("No related contact in contact api for id: " + contact.getDn());
+                    continue;
+                }
+                ContactObject co = contact.getContactObject(apiContact);
+                String key = gson.toJson(contact.getKey()).toString().replaceAll("\"", "&#34;");
+                StringBuilder value = new StringBuilder();
+                value.append(co.getName());
+                if (contactBox.isDistrictSelector()) {
+                    value.append(", ");
+                    value.append(districts.get(contact.getDistrict()));
+                }
+                contacts.put(key, value.toString());
+
+            }
+
+            model.addAttribute("areaTypeName", "Stadsområde");
+            addActionUrl(response, model);
+            model.addAttribute("contactList", contacts);
+            model.addAttribute("renderResponse", response);
+
         }
-        
-       	model.addAttribute("areaTypeName", "Stadsområde");
-        
-        model.addAttribute("contactList", contacts);        
-        model.addAttribute("renderResponse", response);
         if (isUseInContent())
             return "contactInfoForm";
         else
             return "contactBoxForm";
     }
+
+    private void addActionUrl(RenderResponse response, Model model){
+        PortletURL actionUrl = response.createActionURL();
+
+        try {
+            actionUrl.setWindowState(ContactController.WINDOWSTATE_SOLO);
+            model.addAttribute("actionUrl", actionUrl);
+        } catch (WindowStateException e) {
+            e.printStackTrace();
+        }
+
+    }
+    private void setSoloWindowState(ActionResponse response){
+        try {
+            response.setWindowState(ContactController.WINDOWSTATE_SOLO);
+
+        } catch (WindowStateException  e) {
+        }
+    }
     
     @RequestMapping // default
     public void processAction(Model model, @ModelAttribute("contactBox") ContactBox contactBox, PortletPreferences prefs, ActionRequest request, ActionResponse response) {        
       
-        if (request.getParameter("_ok") != null) {                
+        if (request.getParameter("_ok") != null) {
             try {
                 saveContactBox(contactBox, request, prefs);
             } catch (Exception e) {
                 logger.error(e.getMessage(), e);
             }
+        }else  if (request.getParameter("_abort") != null) {
+
+            logger.debug("cancel");
         }
         else if (request.getParameter("_addContact") != null) {
             response.setRenderParameter("action", "add");
+            setSoloWindowState(response);
+
         }
         else if (request.getParameter("_modifyContact") != null) {
             response.setRenderParameter("contact", request.getParameter("contact"));
             response.setRenderParameter("action", "modify");
+            setSoloWindowState(response);
         }
         else if (request.getParameter("_removeContact") != null) {
             ContactKey key = gson.fromJson(request.getParameter("contact"), ContactKey.class);
             contactBox.getContacts().remove(key);
+            setSoloWindowState(response);
         }
         
         if (request.getParameter("_ok") != null || request.getParameter("_cancel") != null) {   
              
             try {
                 response.setPortletMode(PortletMode.VIEW);
+                response.setWindowState(WindowState.NORMAL);
             } catch (PortletModeException e) {
+                logger.error(e.getMessage(), e);
+            }catch (WindowStateException e){
                 logger.error(e.getMessage(), e);
             }
         }
@@ -189,7 +215,7 @@ public class ContactConfigController extends ContactController {
         }
         if (contactBox.isDistrictSelector())
             model.addAttribute("districts", getDistricts(contactBox));
-        
+
         return contactForm(model, request, response);
     }
     
@@ -213,7 +239,7 @@ public class ContactConfigController extends ContactController {
         Utils utils = (Utils)request.getAttribute("sitevision.utils");
 
         model.addAttribute("directoryUtil", utils.getDirectoryUtil());
-        model.addAttribute("renderSoloURL", createRenderSoloURL(response));
+     //   model.addAttribute("renderSoloURL", createRenderSoloURL(response));
         model.addAttribute("renderResponse", response);
         model.addAttribute("types", types);
         model.addAttribute("attributes", attributes);
@@ -221,8 +247,9 @@ public class ContactConfigController extends ContactController {
        	model.addAttribute("areaTypeName", "stadsområde");
         if (isUseInContent()) 
             model.addAttribute("useInContent", Boolean.TRUE);
-            
-        return "contactForm";   
+        addActionUrl(response, model);
+
+        return "contactForm";
     }
 
     @SuppressWarnings("unchecked")

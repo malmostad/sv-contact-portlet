@@ -1,6 +1,6 @@
 #set($springXhtmlCompliant = true)
 #parse("head.vm")
-<form id="contactForm" action="$renderResponse.createActionURL()" method="post">
+<form id="contactForm" action="$actionUrl" method="post">
 	<fieldset style="padding:5px">
 		<legend>Kontaktperson/funktion</legend>
 		<input type="hidden" name="action"  value="$action" />
