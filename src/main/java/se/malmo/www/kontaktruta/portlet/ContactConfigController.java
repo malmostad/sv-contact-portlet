@@ -97,7 +97,6 @@ public class ContactConfigController extends ContactController {
     @RequestMapping // default
     public String doConfig(Model model, PortletPreferences prefs, RenderRequest request, RenderResponse response) {
         if(request.getPortletMode().toString().equals("config")) {
-            Utils utils = (Utils) request.getAttribute("sitevision.utils");
 
             // Remove the avatar option to be selectable in the config view
             if (!showAvatar) {
@@ -139,14 +138,12 @@ public class ContactConfigController extends ContactController {
             addActionUrl(response, model);
             model.addAttribute("contactList", contacts);
             model.addAttribute("renderResponse", response);
-
         }
         if (isUseInContent())
             return "contactInfoForm";
         else
             return "contactBoxForm";
     }
-
     private void addActionUrl(RenderResponse response, Model model){
         PortletURL actionUrl = response.createActionURL();
 
@@ -154,7 +151,7 @@ public class ContactConfigController extends ContactController {
             actionUrl.setWindowState(ContactController.WINDOWSTATE_SOLO);
             model.addAttribute("actionUrl", actionUrl);
         } catch (WindowStateException e) {
-            e.printStackTrace();
+            logger.error(e.getMessage(), e);
         }
 
     }
@@ -163,15 +160,16 @@ public class ContactConfigController extends ContactController {
             response.setWindowState(ContactController.WINDOWSTATE_SOLO);
 
         } catch (WindowStateException  e) {
+            logger.error(e.getMessage(), e);
         }
     }
     
     @RequestMapping // default
-    public void processAction(Model model, @ModelAttribute("contactBox") ContactBox contactBox, PortletPreferences prefs, ActionRequest request, ActionResponse response) {        
-      
+    public void processAction(Model model, @ModelAttribute("contactBox") ContactBox contactBox, PortletPreferences prefs, ActionRequest request, ActionResponse response) {
         if (request.getParameter("_ok") != null) {
             try {
                 saveContactBox(contactBox, request, prefs);
+
             } catch (Exception e) {
                 logger.error(e.getMessage(), e);
             }
@@ -193,7 +191,8 @@ public class ContactConfigController extends ContactController {
             ContactKey key = gson.fromJson(request.getParameter("contact"), ContactKey.class);
             contactBox.getContacts().remove(key);
             setSoloWindowState(response);
-        }
+        } else
+            setSoloWindowState(response);
         
         if (request.getParameter("_ok") != null || request.getParameter("_cancel") != null) {   
              
@@ -231,7 +230,6 @@ public class ContactConfigController extends ContactController {
         }
         if (contactBox.isDistrictSelector())
             model.addAttribute("districts", getDistricts(contactBox, contact));
-        
         return contactForm(model, request, response);
     }
     
@@ -239,7 +237,7 @@ public class ContactConfigController extends ContactController {
         Utils utils = (Utils)request.getAttribute("sitevision.utils");
 
         model.addAttribute("directoryUtil", utils.getDirectoryUtil());
-     //   model.addAttribute("renderSoloURL", createRenderSoloURL(response));
+        model.addAttribute("renderSoloURL", createRenderSoloURL(response));
         model.addAttribute("renderResponse", response);
         model.addAttribute("types", types);
         model.addAttribute("attributes", attributes);
@@ -330,7 +328,8 @@ public class ContactConfigController extends ContactController {
             }
             contactBox.getContacts().put(contact.getKey(), contact);
         }
-        response.setRenderParameter("action", "config");            
+        setSoloWindowState(response);
+        response.setRenderParameter("action", "config");
     }    
     
     
@@ -339,6 +338,7 @@ public class ContactConfigController extends ContactController {
             @ModelAttribute("contactBox") ContactBox contactBox, ActionResponse response) {
         ContactKey key = gson.fromJson(contact, ContactKey.class);
         contactBox.getContacts().remove(key);
+        setSoloWindowState(response);
         response.setRenderParameter("action", "config");
     }
     
