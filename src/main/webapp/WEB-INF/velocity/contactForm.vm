@@ -42,7 +42,7 @@
 						#if($areaTypeName=="stadsdel") 
 							Stadsdel 
 						#else 
-							Stadsområde 
+							Område
 						#end
 					</label><br/>
 					#springFormSingleSelect( "contact.district" $districts "" )				
@@ -132,7 +132,7 @@
 			}
 			#if ($districts)
 			if ($("#district").val() == '') {
-				errors[errors.length] = "Du måste välja stadsområde!";
+				errors[errors.length] = "Du måste välja område!";
 			}
 			#end
 			if (errors.length > 0) {

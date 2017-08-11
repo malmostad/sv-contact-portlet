@@ -109,7 +109,7 @@ public class ContactController implements PortletContextAware {
         
         this.areas = new LinkedHashMap<String,String>();
 
-        areas.put("", "Välj stadsområde");
+        areas.put("", "Välj område");
         areas.put("NORR", "Norr");
         areas.put("ÖSTER", "Öster");
         areas.put("SÖDER", "Söder");

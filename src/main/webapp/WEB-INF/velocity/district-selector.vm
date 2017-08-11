@@ -8,7 +8,7 @@
       </select>
   </div>
   <div class="form-group">
-      <span role="status" aria-live="polite" class="ui-helper-hidden-accessible"></span><input type="text" class="form-control ui-autocomplete-input" placeholder="Hitta stadsområde via adress" autocomplete="off">
+      <span role="status" aria-live="polite" class="ui-helper-hidden-accessible"></span><input type="text" class="form-control ui-autocomplete-input" placeholder="Hitta område via adress" autocomplete="off">
   </div>
                         
 </form>
