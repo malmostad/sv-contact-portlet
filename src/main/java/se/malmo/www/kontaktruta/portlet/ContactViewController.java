@@ -4,11 +4,7 @@
 package se.malmo.www.kontaktruta.portlet;
 
 import java.io.StringWriter;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -24,37 +20,27 @@ import javax.portlet.ActionResponse;
 import javax.portlet.PortletPreferences;
 import javax.portlet.PortletRequest;
 import javax.portlet.PortletSession;
-import javax.portlet.PortletURL;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
-import javax.servlet.http.Cookie;
-import javax.xml.ws.Action;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.log4j.Logger;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
-import org.datacontract.schemas._2004._07.primesystems_primecasecore.Form;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.ObjectError;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import se.malmo.www.district.web.DistrictController;
 import se.malmo.www.kontaktruta.model.APIContact;
 import se.malmo.www.kontaktruta.model.Contact;
 import se.malmo.www.kontaktruta.model.ContactBox;
 import se.malmo.www.kontaktruta.model.ContactKey;
 import se.malmo.www.kontaktruta.model.ContactObject;
-import se.malmo.www.kontaktruta.service.ContactService;
 import se.malmo.www.kontaktruta.util.ContactBoxUtils;
-import se.malmo.www.skrivtilloss.exception.WriteToUsDeliveryException;
 import se.malmo.www.skrivtilloss.model.Message;
 import senselogic.sitevision.api.Utils;
 import senselogic.sitevision.api.context.PortletContextUtil;
@@ -75,6 +61,7 @@ public class ContactViewController extends ContactController {
     @Value("${kontaktruta.link_username}") private boolean linkUsername;
     @Value("${kontaktruta.show_avatar}") private boolean showAvatar;
     @Value("${kontaktruta.require_email}") private boolean requiereEmail;
+    @Value("${kontaktruta.anonymous_text}") private String anonymousText;
 
     public static final String CONTACT_ID = "contactid";
     protected final static String MA_DISTRICT = "district";
@@ -440,6 +427,8 @@ public class ContactViewController extends ContactController {
         model.addAttribute("linkUsername", linkUsername);
         model.addAttribute("showAvatar", showAvatar);
         model.addAttribute("reqEmail", requiereEmail);
+        if(!isEmptyOrNull(anonymousText))
+            model.addAttribute("anonymousText", anonymousText);
         if (isUseInContent())
             model.addAttribute("useInContent", Boolean.TRUE);
         
