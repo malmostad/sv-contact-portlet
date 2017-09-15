@@ -10,6 +10,7 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import javax.jcr.Node;
 import javax.mail.internet.AddressException;
@@ -23,9 +24,8 @@ import javax.portlet.PortletSession;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.apache.log4j.Logger;
+
+
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
 import org.springframework.beans.factory.annotation.Value;
@@ -54,8 +54,9 @@ import senselogic.sitevision.api.render.LinkRenderer;
 @Controller
 @RequestMapping("VIEW")
 public class ContactViewController extends ContactController {
-    private final Log logger = LogFactory.getLog(this.getClass());
-    
+    //private final Log logger = LogFactory.getLog(this.getClass());
+    private final Logger logger =  Logger.getLogger(this.getClass().getName());
+
     @Value("${kontaktruta.contact_us_header}") private String contactUsHeader;
     @Value("${kontaktruta.link_email}") private boolean linkEmail;
     @Value("${kontaktruta.link_username}") private boolean linkUsername;
@@ -229,7 +230,8 @@ public class ContactViewController extends ContactController {
     
     @RequestMapping(params = "action=writetous")
     public void processWriteToUsAction(Model model, PortletPreferences prefs, ActionRequest request, ActionResponse response) {    
-    	
+
+
     	String name= request.getParameter("name");
 		String email = request.getParameter("email");
 		String contactid = request.getParameter("contactid");
@@ -292,7 +294,7 @@ public class ContactViewController extends ContactController {
         long sessionLifetime = System.currentTimeMillis() - session.getCreationTime();
         if (sessionLifetime < MIN_SESSION_DURATION) {
             String msg = (new StringBuilder()).append("Possible SPAM robot post detected from ").append(utils.getClientUtil().getClientAddress()).append(", Post was done only ").append(sessionLifetime).append(" ms after session was created, limit is").append(MIN_SESSION_DURATION).append(" ms").toString();
-            logger.warn(msg);
+            logger.warning(msg);
             model.addAttribute("senderror","Spam");            
             hasErrors = true;
         }            
@@ -301,7 +303,6 @@ public class ContactViewController extends ContactController {
     	if(!hasErrors){
     		//No validation errors, let's send mail    		  
     		  Message messageToSend = new Message();
-    		  
     	      Map<String, String> fields = new HashMap<String, String>();
     	      
     	      fields.put(Message.USERIP_PCID,utils.getClientUtil().getClientAddress());
@@ -320,7 +321,7 @@ public class ContactViewController extends ContactController {
     	    	  int subjectIndex = Integer.parseInt(subject);
     	    	  fields.put(Message.TYPE_PCID, MESSAGE_SUBJECTS[subjectIndex]);
     	      }catch(Exception e){
-    	    	  logger.error("Error setting subject in mail: "+e.getMessage());
+    	    	  logger.warning("Error setting subject in mail: "+e.getMessage());
     	      }
     	      fields.put(Message.MESSAGE_PCID, message);
     	      messageToSend.setField(fields);
@@ -338,7 +339,7 @@ public class ContactViewController extends ContactController {
     		    	responseView = "writeToUsSuccess";
     	        } catch (Exception e) {
                    
-    	            logger.error("Error sending mail - "+e.getMessage());
+    	            logger.severe("Error sending mail - "+e.getMessage());
     	            model.addAttribute("senderror","Tekniskt fel, ditt meddelande kunde inte skickas, var vänlig försök igen senare");
     	            model.addAttribute("name", name);    	
     		    	model.addAttribute("email", email);
@@ -399,7 +400,7 @@ public class ContactViewController extends ContactController {
             APIContact apiContact = findContact(contact);
             if (apiContact == null){
                 missingContacts = true;
-                Logger.getLogger(ContactViewController.class).error("No related contact in contact api for id: " + contact.getDn());
+                logger.warning("No related contact in contact api for id: " + contact.getDn());
                 continue;
             }
             ContactObject co = contact.getContactObject(apiContact);
