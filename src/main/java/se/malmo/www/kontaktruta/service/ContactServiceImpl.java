@@ -57,9 +57,12 @@ public class ContactServiceImpl implements ContactService {
             contact = restTemplate.getForObject(String.format(BASEURL, contactType, id).replace("&app_token", "?app_token"), classType);
             Logger.getLogger(ContactServiceImpl.class.getName()).log(Level.INFO, new StringBuilder(" found: ").append(contact.getName()).append(" for id:").append(id).toString());
         } catch (HttpClientErrorException ex){
-            Logger.getLogger(ContactServiceImpl.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
+            if(ex.getMessage().equals("404 Not Found")){
+                Logger.getLogger(ContactServiceImpl.class.getName()).log(Level.WARNING, ex.getMessage() + " Contact type: " + contactType + " Id: " + id );
+            }else
+                Logger.getLogger(ContactServiceImpl.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
             return contact;
-        }   
+        }
         return contact;
     }
 
@@ -80,7 +83,10 @@ public class ContactServiceImpl implements ContactService {
         try {
             contacts = restTemplate.getForObject(String.format(BASEURL, contactType, query), type);
         } catch (HttpClientErrorException ex){
-            Logger.getLogger(ContactServiceImpl.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
+            if(ex.getMessage().equals("404 Not Found")){
+                Logger.getLogger(ContactServiceImpl.class.getName()).log(Level.SEVERE, ex.getMessage() + " Contact type: " + contactType + " Query: " + query );
+            }else
+                Logger.getLogger(ContactServiceImpl.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
             return contacts;
         }   
         return contacts;
